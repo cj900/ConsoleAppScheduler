@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 
 namespace ConsoleAppScheduler
@@ -13,6 +14,9 @@ namespace ConsoleAppScheduler
         public bool ErrorOutput { get; set; }
         public bool StandardOutput { get; set; }
         public string LogFile { get; set; }
+        public string JobName{ get; set; }
+        public string TriggerName{ get; set; }
+        public string GroupName{ get; set; }
         public void Log(string msg)
         {
             if (!String.IsNullOrWhiteSpace(msg))
@@ -22,11 +26,22 @@ namespace ConsoleAppScheduler
             }
         }
 
+        public void StopJob()
+        {
+            var result = QuartzHelpers.removeJob(JobName, TriggerName, GroupName);
+            if (result)
+            {
+                Logs.Write(LogFile,$"[{LogPrefix}]Stop Success");
+            }
+            else
+            {
+                Logs.Write(LogFile,$"[{LogPrefix}]Stop Error");
+            }
+        }
         public void Log(Exception e)
         {
           //  Logs.WriteCurrent($"[{LogPrefix}][Error] "+e.GetExceptionFootprints());
           Logs.Write(LogFile,$"[{LogPrefix}][Error] "+e.GetExceptionFootprints());
-
         }
     }
 }
