@@ -17,6 +17,7 @@ namespace ConsoleAppScheduler
         public string JobName{ get; set; }
         public string TriggerName{ get; set; }
         public string GroupName{ get; set; }
+        public bool Enable{ get; set; }
         public void Log(string msg)
         {
             if (!String.IsNullOrWhiteSpace(msg))
@@ -43,5 +44,6 @@ namespace ConsoleAppScheduler
           //  Logs.WriteCurrent($"[{LogPrefix}][Error] "+e.GetExceptionFootprints());
           Logs.Write(LogFile,$"[{LogPrefix}][Error] "+e.GetExceptionFootprints());
         }
+        
     }
 }
