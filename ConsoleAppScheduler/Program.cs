@@ -27,7 +27,10 @@ namespace ConsoleAppScheduler
                         Logs.WriteCurrent("[Main] Stop All");
                         foreach (var instanceAppEntity in Config.Instance.AppEntities)
                         {
-                            instanceAppEntity.StopJob();
+                            if (instanceAppEntity.Enable)
+                            {
+                                instanceAppEntity.StopJob();
+                            }
                         }
 
                         break;
@@ -40,7 +43,10 @@ namespace ConsoleAppScheduler
                     case "reload":
                         foreach (var instanceAppEntity in Config.Instance.AppEntities)
                         {
-                            instanceAppEntity.StopJob();
+                            if (instanceAppEntity.Enable)
+                            {
+                                instanceAppEntity.StopJob();
+                            }
                         }
 
                         SchedulerList.Clear();
@@ -73,9 +79,8 @@ namespace ConsoleAppScheduler
                         instanceAppEntity.JobName, instanceAppEntity.TriggerName,
                         instanceAppEntity.GroupName, instanceAppEntity);
                     SchedulerList.Add(job);
+                    i++;
                 }
-
-                i++;
             }
             Logs.WriteCurrent($"[Main] {Config.Instance.AppEntities.Count(x => x.Enable)} Apps Will Run");
         }
