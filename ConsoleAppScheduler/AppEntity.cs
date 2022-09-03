@@ -38,6 +38,18 @@ namespace ConsoleAppScheduler
             {
                 Logs.Write(LogFile,$"[{LogPrefix}]Stop Error");
             }
+        } 
+        public void StartJob()
+        {
+            var result = QuartzHelpers.StartJob(JobName, TriggerName, GroupName);
+            if (result)
+            {
+                Logs.Write(LogFile,$"[{LogPrefix}] Job Started Success");
+            }
+            else
+            {
+                Logs.Write(LogFile,$"[{LogPrefix}] Job Start Error");
+            }
         }
         public void Log(Exception e)
         {

@@ -59,5 +59,22 @@ namespace ConsoleAppScheduler
             }
             return false;
         }
+        
+        public static bool StartJob(String jobName, String triggerName, String GroupName)
+        {
+            var scheduler = new StdSchedulerFactory().GetScheduler().Result;
+          //  var triggerKey = new TriggerKey(triggerName, GroupName);
+            var jobKey = JobKey.Create(jobName, GroupName);
+            try
+            {
+                return scheduler.TriggerJob(jobKey).IsCompleted;
+            }
+            catch (Exception e)
+            {
+                Logs.PrintLog(e);
+                //  throw new RuntimeException(e);
+            }
+            return false;
+        }
     }
 }

@@ -32,13 +32,13 @@ namespace ConsoleAppScheduler
                                 instanceAppEntity.StopJob();
                             }
                         }
-
                         break;
                     case "help":
                         Console.WriteLine("help - Show Help Menu");
                         Console.WriteLine("exit - Exit Program");
                         Console.WriteLine("cancel - Remove All Job");
                         Console.WriteLine("reload - Reload Config File And Start All Job");
+                        Console.WriteLine("show - Show The Running Job");
                         break;
                     case "reload":
                         foreach (var instanceAppEntity in Config.Instance.AppEntities)
@@ -53,6 +53,35 @@ namespace ConsoleAppScheduler
                         Config.Reload();
                         init();
                         //Console.WriteLine(Config.Instance.AppEntities.Count);
+                        break;
+                    case "show":
+                        foreach (var instanceAppEntity in Config.Instance.AppEntities)
+                        {
+                            if (instanceAppEntity.Enable)
+                            {
+                                Logs.WriteCurrent( $"{Config.Instance.AppEntities.IndexOf(instanceAppEntity)+1}. {instanceAppEntity.LogPrefix} is Running.");
+                            }
+                        }
+                        break;
+                    case "run":
+                        Logs.WriteCurrent("Please Enter The Index of The Application To Run");
+                        var position = Console.ReadLine();
+                        try
+                        {
+                            Config.Instance.AppEntities[Convert.ToInt32(position) - 1].StartJob();
+                        }
+                        catch (Exception e)
+                        {
+                             Logs.WriteCurrent("Enter Integer Error!");
+                        }
+                      
+                        /*foreach (var instanceAppEntity in Config.Instance.AppEntities)
+                        {1
+                            if (instanceAppEntity.Enable)
+                            {
+                                Logs.WriteCurrent(instanceAppEntity.LogPrefix +" is Running.");
+                            }
+                        }*/
                         break;
                     default:
                         //  Logs.WriteCurrent("[Main] User Exit");

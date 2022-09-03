@@ -46,7 +46,9 @@ namespace ConsoleAppScheduler
                     }
                     process.WaitForExit();
                     process.Dispose();
-                    Logs.WriteCurrent($"[{appEntity.LogPrefix}] Next Run Time : {context.NextFireTimeUtc.Value.ToLocalTime()}");
+                    if (context.NextFireTimeUtc != null)
+                        Logs.WriteCurrent(
+                            $"[{appEntity.LogPrefix}] Next Run Time : {context.NextFireTimeUtc.Value.ToLocalTime()}");
                 }
             }
             catch (Exception e)
