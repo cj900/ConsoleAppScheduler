@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 
 
 namespace ConsoleAppScheduler
@@ -17,7 +18,10 @@ namespace ConsoleAppScheduler
             while (true)
             {
                 var input = Console.ReadLine();
-                switch (@input)
+
+                var cmds = input.ToLower().Split(" ");
+                // switch (@input)
+                switch (cmds[0])
                 {
                     case "exit":
                         Logs.WriteCurrent("[Main] User Exit");
@@ -32,6 +36,7 @@ namespace ConsoleAppScheduler
                                 instanceAppEntity.StopJob();
                             }
                         }
+
                         break;
                     case "help":
                         Console.WriteLine("help - Show Help Menu");
@@ -59,22 +64,28 @@ namespace ConsoleAppScheduler
                         {
                             if (instanceAppEntity.Enable)
                             {
-                                Logs.WriteCurrent( $"{Config.Instance.AppEntities.IndexOf(instanceAppEntity)+1}. {instanceAppEntity.LogPrefix} is Running.");
+                                Logs.WriteCurrent(
+                                    $"{Config.Instance.AppEntities.IndexOf(instanceAppEntity) + 1}. {instanceAppEntity.LogPrefix} is Running.");
                             }
                         }
+
                         break;
                     case "run":
-                        Logs.WriteCurrent("Please Enter The Index of The Application To Run");
-                        var position = Console.ReadLine();
-                        try
+                       // Logs.WriteCurrent("Please Enter The Index of The Application To Run");
+                        //var position = Console.ReadLine();
+                        if (cmds.Length > 1)
                         {
-                            Config.Instance.AppEntities[Convert.ToInt32(position) - 1].StartJob();
+                            try
+                            {
+                                //Config.Instance.AppEntities[Convert.ToInt32(position) - 1].StartJob();
+                                Config.Instance.AppEntities[Convert.ToInt32(cmds[1]) - 1].StartJob();
+                            }
+                            catch (Exception e)
+                            {
+                                Logs.WriteCurrent("Enter Integer Error!");
+                            }
                         }
-                        catch (Exception e)
-                        {
-                             Logs.WriteCurrent("Enter Integer Error!");
-                        }
-                      
+
                         /*foreach (var instanceAppEntity in Config.Instance.AppEntities)
                         {1
                             if (instanceAppEntity.Enable)
@@ -84,7 +95,7 @@ namespace ConsoleAppScheduler
                         }*/
                         break;
                     default:
-                        //  Logs.WriteCurrent("[Main] User Exit");
+                        Logs.WriteCurrent("Command not Find!"); 
                         break;
                 }
             }
@@ -94,7 +105,7 @@ namespace ConsoleAppScheduler
         public static void init()
         {
             Logs.WriteCurrent("[Main] App Start");
-           
+
             var i = 0;
             foreach (var instanceAppEntity in Config.Instance.AppEntities)
             {
@@ -111,6 +122,7 @@ namespace ConsoleAppScheduler
                     i++;
                 }
             }
+
             Logs.WriteCurrent($"[Main] {Config.Instance.AppEntities.Count(x => x.Enable)} Apps Will Run");
         }
     }

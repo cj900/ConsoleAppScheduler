@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 
@@ -25,7 +26,20 @@ namespace ConsoleAppScheduler
                 processStartInfo.RedirectStandardError = appEntity.ErrorOutput;
                 // processStartInfo.StandardOutputEncoding =  Encoding.Default;
                 processStartInfo.UseShellExecute = false;
-                var process = Process.Start(processStartInfo);
+                Process process =null;
+//              Console.WriteLine((DateTimeOffset.Now.ToUniversalTime()-context.ScheduledFireTimeUtc).Value.TotalSeconds);
+                if (appEntity.RandomStartupTime > 0)
+                {
+                    Random rnd = new Random();
+                    int second  = rnd.Next(1, appEntity.RandomStartupTime );
+                    Logs.WriteCurrent($"Wait {second} seconds to start");
+                    Thread.Sleep(second*1000);
+                    process= Process.Start(processStartInfo);
+                }
+                else
+                {
+                    process = Process.Start(processStartInfo);
+                }
                 if (process == null)
                 {
                     Logs.WriteCurrent("Proccess App Cannot Start!");

@@ -18,6 +18,7 @@ namespace ConsoleAppScheduler
         public string TriggerName{ get; set; }
         public string GroupName{ get; set; }
         public bool Enable{ get; set; }
+        public int RandomStartupTime{ get; set; }
         public void Log(string msg)
         {
             if (!String.IsNullOrWhiteSpace(msg))
